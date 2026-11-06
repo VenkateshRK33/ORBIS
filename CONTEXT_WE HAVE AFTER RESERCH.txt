@@ -1,0 +1,2030 @@
+﻿============================================================
+                    ORBIS
+       AI-POWERED SPACE DEBRIS COLLISION
+                DETECTION SYSTEM
+============================================================
+
+TEAM BRIEFING DOCUMENT
+Purpose: Give every team member a complete understanding
+of what the project is, why it matters, what has been
+researched, what we plan to build, what data we need,
+what algorithms we use, and what each member must do.
+
+
+============================================================
+1. PROJECT IN ONE SENTENCE
+============================================================
+
+Orbis is a Space Situational Awareness prototype that
+uses real orbital data, orbital mechanics, conjunction
+analysis, machine learning, and uncertainty modelling to
+identify and assess potential collision risks between
+important active satellites and space debris.
+
+
+============================================================
+2. WHAT PROBLEM ARE WE ACTUALLY SOLVING?
+============================================================
+
+Earth orbit contains many artificial objects:
+
+â€¢ Active satellites
+â€¢ Inactive/defunct satellites
+â€¢ Rocket bodies
+â€¢ Fragmentation debris
+â€¢ Other tracked orbital objects
+
+All these objects move at very high orbital velocities.
+
+If two objects approach each other closely, there is a
+possibility of collision.
+
+The problem is NOT simply:
+
+"Where is the satellite?"
+
+The actual problem is:
+
+"Where will the satellite and debris be in the future,
+will their trajectories bring them close to each other,
+when will the closest approach happen, how close will
+they come, and how should the risk of that encounter
+be assessed?"
+
+That is the problem Orbis tries to address.
+
+
+============================================================
+3. WHY THIS MATTERS
+============================================================
+
+Satellites support important services such as:
+
+â€¢ Communication
+â€¢ Navigation
+â€¢ Weather observation
+â€¢ Earth observation
+â€¢ Scientific missions
+â€¢ Defence and security
+
+A serious collision can destroy an operational satellite
+and can also create additional debris.
+
+This creates a feedback problem:
+
+Collision
+   â†“
+More debris
+   â†“
+More objects at risk
+   â†“
+Potentially more collisions
+
+This general concept is commonly associated with the
+"Kessler Syndrome" / cascading debris problem.
+
+Therefore continuous monitoring of the orbital environment
+is important.
+
+
+============================================================
+4. WHAT IS SPACE SITUATIONAL AWARENESS (SSA)?
+============================================================
+
+Space Situational Awareness means understanding what is
+happening in the space environment.
+
+For our project, the important part of SSA is understanding:
+
+â€¢ What objects are in orbit?
+â€¢ Where are they?
+â€¢ How are they moving?
+â€¢ What objects may come close to each other?
+â€¢ How uncertain are those predictions?
+â€¢ Which encounters deserve attention?
+
+Orbis is therefore an SSA-oriented system.
+
+
+============================================================
+5. OUR CORE IDEA
+============================================================
+
+Our entire project can be remembered using this chain:
+
+REAL ORBITAL DATA
+        â†“
+SGP4 ORBIT PROPAGATION
+        â†“
+CONJUNCTION SCREENING
+        â†“
+TCA + MISS DISTANCE
+        â†“
+FEATURE ENGINEERING
+        â†“
+XGBOOST RISK ASSESSMENT
+        â†“
+MONTE CARLO UNCERTAINTY ANALYSIS
+        â†“
+RISK CLASSIFICATION
+        â†“
+DASHBOARD + ALERTS
+
+
+============================================================
+6. IMPORTANT: WE ARE NOT INVENTING ALL THE ALGORITHMS
+============================================================
+
+This is very important for the final-year project.
+
+We are NOT claiming:
+
+"We invented SGP4."
+
+We are NOT claiming:
+
+"We invented collision probability theory."
+
+We are NOT claiming:
+
+"No existing system can detect satellite conjunctions."
+
+Instead, our contribution is the INTEGRATION.
+
+We are combining established techniques into one project:
+
+â€¢ Real orbital data
+â€¢ Orbital propagation
+â€¢ Conjunction screening
+â€¢ Risk modelling
+â€¢ Machine learning
+â€¢ Uncertainty analysis
+â€¢ Visualization
+
+The research contribution is therefore the design and
+implementation of an integrated AI-assisted workflow.
+
+
+============================================================
+7. WHAT IS TLE DATA?
+============================================================
+
+TLE means:
+
+Two-Line Element Set.
+
+A TLE is a standard representation of orbital information
+associated with an orbital object.
+
+It does NOT directly mean:
+
+Latitude = X
+Longitude = Y
+
+Instead, it contains orbital information that can be
+propagated to obtain an object's state at a requested time.
+
+Conceptually:
+
+TLE
+ â†“
+Orbital propagation model
+ â†“
+Position + velocity at time t
+
+
+============================================================
+8. WHAT DID WE DISCOVER ABOUT THE DATA?
+============================================================
+
+We investigated real data sources.
+
+The two most directly useful sources for our orbital
+propagation work are:
+
+1. Space-Track
+2. CelesTrak
+
+We successfully opened CelesTrak orbital data and also
+accessed Space-Track after registration.
+
+The raw records looked like:
+
+1 XXXXX...
+2 XXXXX...
+
+This looks like random numbers initially.
+
+It is NOT random data.
+
+Those numbers represent orbital parameters encoded
+according to the TLE format.
+
+We do not manually interpret every number.
+
+Our program will parse the TLE and pass it into an
+orbital propagation library.
+
+
+============================================================
+9. SPACE-TRACK
+============================================================
+
+Space-Track is important because it provides access to
+orbital catalog data.
+
+We registered and explored its Query Builder.
+
+We learned that:
+
+â€¢ The GP class is relevant for General Perturbations data.
+â€¢ TLE format can be requested.
+â€¢ Query filters can be applied.
+â€¢ Raw output can look like a long sequence of TLE records.
+
+For the project, Space-Track can be treated as an important
+real orbital-data source.
+
+IMPORTANT:
+
+Do NOT tell judges that Space-Track gives us a ready-made
+"collision ML dataset."
+
+What it gives us is orbital/object data.
+
+We still have to create the useful features and learning
+dataset ourselves.
+
+
+============================================================
+10. CELESTRAK
+============================================================
+
+CelesTrak provides publicly accessible orbital data in
+formats such as TLE/3LE and other representations.
+
+It is useful because:
+
+â€¢ It is easy to access.
+â€¢ It is suitable for development.
+â€¢ It provides categorized orbital data.
+â€¢ It can be useful for testing the TLE-processing pipeline.
+
+We already tested this source and saw the raw TLE output.
+
+
+============================================================
+11. WHAT ABOUT NASA, ESA AND ISRO?
+============================================================
+
+We investigated this because the judges asked about
+official datasets.
+
+Important distinction:
+
+Not every space-agency website is a direct TLE download
+source.
+
+NASA, ESA and ISRO have valuable space/debris/satellite
+information, research, reports, catalogues and scientific
+resources.
+
+Those sources can be useful for:
+
+â€¢ Validation
+â€¢ Satellite metadata
+â€¢ Mission information
+â€¢ Debris research
+â€¢ Environmental modelling
+â€¢ Background research
+
+But our actual orbital propagation pipeline requires
+machine-readable orbital information.
+
+Therefore our primary orbital-data pipeline is based on
+sources such as Space-Track and CelesTrak.
+
+Do not blindly claim that every NASA/ESA/ISRO database is
+a direct replacement for TLE data.
+
+
+============================================================
+12. WHY OTHER SATELLITE DATABASES ARE STILL USEFUL
+============================================================
+
+This is a very important concept.
+
+TLE answers:
+
+"How can we determine the orbital state?"
+
+Satellite metadata can answer:
+
+"What is this object?"
+
+For example, metadata may provide:
+
+â€¢ Satellite name
+â€¢ NORAD catalog ID
+â€¢ Mission
+â€¢ Operator
+â€¢ Country
+â€¢ Satellite category
+â€¢ Launch information
+â€¢ Orbit information
+
+So we can combine:
+
+TLE / orbital data
+        +
+Satellite metadata
+        â†“
+Richer object record
+
+
+============================================================
+13. NORAD CATALOG ID / OBJECT ID
+============================================================
+
+A common object identifier is extremely useful because it
+can allow us to associate orbital information with
+metadata.
+
+Conceptually:
+
+NORAD ID
+   â†“
+TLE record
+   +
+Satellite metadata
+   â†“
+Complete object profile
+
+This can help us:
+
+â€¢ Identify Indian satellites
+â€¢ Identify active satellites
+â€¢ Display meaningful satellite names
+â€¢ Categorize object types
+â€¢ Improve dashboard output
+â€¢ Build additional contextual features
+
+
+============================================================
+14. DO WE NEED ONLY TLE DATA?
+============================================================
+
+NO.
+
+For the basic physics pipeline:
+
+TLE is enough to start orbit propagation.
+
+But for a richer project we can add metadata.
+
+For example:
+
+TLE:
+"Where/how is the object moving?"
+
+Metadata:
+"What object is it?"
+
+Conjunction information:
+"Has it had close approaches?"
+
+These different sources can be combined.
+
+
+============================================================
+15. THE BIG DATASET PROBLEM
+============================================================
+
+This was the major concern raised by the judges.
+
+The question is:
+
+"Where will the machine-learning training data come from?"
+
+We must answer honestly.
+
+Real orbital data is available.
+
+Real collision events are much rarer than ordinary orbital
+records.
+
+Therefore:
+
+We cannot simply say:
+
+"Space-Track gives us a huge labelled collision dataset."
+
+That is NOT what we should claim.
+
+Instead, our work needs to construct an ML-ready dataset
+from appropriate historical conjunction information,
+derived orbital features, and carefully designed simulated
+scenarios where necessary.
+
+This is one of the main research challenges of our project.
+
+
+============================================================
+16. WHAT IS A CONJUNCTION?
+============================================================
+
+A conjunction is a predicted close approach between two
+space objects.
+
+It does not automatically mean collision.
+
+For example:
+
+Object A
+    \
+     \
+      \      close approach
+       X
+      /
+     /
+Object B
+
+The system must calculate how close they come and when.
+
+
+============================================================
+17. WHAT IS TCA?
+============================================================
+
+TCA = Time of Closest Approach.
+
+Suppose two objects approach one another.
+
+Their distance changes over time:
+
+Far
+ â†“
+Closer
+ â†“
+Minimum distance
+ â†“
+Farther
+
+The instant at the minimum separation is the:
+
+TIME OF CLOSEST APPROACH
+
+
+============================================================
+18. WHAT IS MISS DISTANCE?
+============================================================
+
+Miss distance is the minimum separation between two objects
+during the conjunction.
+
+Example:
+
+Object A
+   â—
+
+          2.4 km
+
+                       â—
+                    Object B
+
+Then the conjunction's miss distance is approximately 2.4 km.
+
+Small miss distance generally means greater concern, but
+distance alone does NOT completely determine collision risk.
+
+
+============================================================
+19. WHY DON'T WE COMPARE EVERY OBJECT WITH EVERY OTHER
+OBJECT DIRECTLY?
+============================================================
+
+If the catalogue contains many objects, comparing every
+possible pair can become computationally expensive.
+
+Conceptually, if there are N objects, the number of pairs
+can grow approximately as:
+
+N(N-1)/2
+
+Therefore we need efficient screening.
+
+Orbis proposes:
+
+Step 1:
+Remove obviously unrelated objects.
+
+Step 2:
+Perform detailed TCA / miss-distance calculations only
+for plausible candidates.
+
+
+============================================================
+20. CONJUNCTION SCREENING
+============================================================
+
+The first screening layer can use orbital/spatial information
+to eliminate objects that clearly cannot produce a dangerous
+encounter within the prediction window.
+
+Possible screening information includes:
+
+â€¢ Altitude / radial range
+â€¢ Orbital characteristics
+â€¢ Spatial region
+â€¢ Time window
+â€¢ Relative trajectory information
+
+The exact screening implementation will be refined during
+development.
+
+
+============================================================
+21. SGP4 â€” ONE OF OUR MOST IMPORTANT ALGORITHMS
+============================================================
+
+SGP4 = Simplified General Perturbations 4.
+
+It is an orbital propagation model designed for use with
+TLE-type orbital data.
+
+Its job in our project is:
+
+TLE
+ â†“
+SGP4
+ â†“
+Position + velocity
+at requested future times
+
+We use it because it is computationally efficient and
+commonly used for TLE-based propagation.
+
+
+============================================================
+22. WHAT HAPPENS INSIDE SGP4 CONCEPTUALLY?
+============================================================
+
+We do not manually calculate satellite coordinates.
+
+The software library performs the propagation calculations.
+
+Conceptually:
+
+Input:
+â€¢ TLE
+â€¢ Requested time
+
+Processing:
+â€¢ Orbital propagation equations
+â€¢ Perturbation modelling
+â€¢ Time evolution
+
+Output:
+â€¢ Position
+â€¢ Velocity
+
+We then use these outputs for conjunction analysis.
+
+
+============================================================
+23. OUR 72-HOUR IDEA
+============================================================
+
+The project specification proposes a future prediction window
+of approximately 72 hours.
+
+That means:
+
+Current orbital information
+        â†“
+SGP4 propagation
+        â†“
+future states over the prediction window
+        â†“
+identify possible conjunctions
+        â†“
+risk assessment
+
+IMPORTANT:
+
+72 hours is a design target/prediction horizon in our proposal.
+
+We still need to validate how accurately our implementation
+can operate over that horizon with the selected data.
+
+
+============================================================
+24. RELATIVE MOTION
+============================================================
+
+For two objects:
+
+Object A position = rA
+Object B position = rB
+
+Relative position:
+
+rRel = rA - rB
+
+Similarly, we can determine relative velocity:
+
+vRel = vA - vB
+
+These relative quantities help us understand how the two
+objects are approaching each other.
+
+This becomes important for:
+
+â€¢ TCA
+â€¢ Miss distance
+â€¢ Collision-risk features
+
+
+============================================================
+25. MACHINE LEARNING PART
+============================================================
+
+Our planned ML algorithm is:
+
+XGBoost
+
+XGBoost is a gradient-boosted decision-tree method that
+works particularly well with structured/tabular data.
+
+Why we considered it:
+
+â€¢ Good for structured numerical features
+â€¢ Can capture nonlinear relationships
+â€¢ Efficient
+â€¢ Strong baseline for tabular ML
+â€¢ Easier to train than many deep-learning approaches when
+  the dataset is relatively structured
+
+
+============================================================
+26. VERY IMPORTANT:
+WHAT DOES XGBOOST ACTUALLY PREDICT?
+============================================================
+
+We should NOT say:
+
+"XGBoost predicts where the satellite will be."
+
+SGP4 does that.
+
+XGBoost is intended for the RISK-ASSESSMENT layer.
+
+Conceptually:
+
+SGP4:
+"Where will the objects be?"
+
+Conjunction analysis:
+"How close will they come?"
+
+XGBoost:
+"Given the encounter characteristics, how should we
+estimate/classify the risk?"
+
+
+============================================================
+27. POSSIBLE ML FEATURES
+============================================================
+
+The project specification proposes features such as:
+
+â€¢ Miss distance
+â€¢ Relative velocity
+â€¢ Orbital inclination
+â€¢ Object size / cross-sectional information
+â€¢ Historical conjunction characteristics
+â€¢ TLE-related information
+â€¢ Other derived orbital features
+
+Additional useful features may be investigated during
+feature engineering.
+
+But we should NOT automatically add every available field.
+
+Each feature must have a reason and should be tested.
+
+
+============================================================
+28. WHY NOT JUST USE DISTANCE?
+============================================================
+
+Because collision risk depends on more than distance.
+
+Imagine:
+
+Case A:
+Two objects are 2 km apart but moving in directions that
+quickly separate them.
+
+Case B:
+Two objects have a similar minimum separation but extremely
+high relative velocity and significant uncertainty.
+
+The risk interpretation can be different.
+
+Therefore we combine several characteristics.
+
+
+============================================================
+29. CLASSICAL RISK VS ML RISK
+============================================================
+
+Traditional conjunction assessment can use physics/statistical
+collision-probability methods.
+
+Our research looked at this established approach because it
+provides an important baseline.
+
+Orbis does not need to replace established probability
+methods.
+
+A more defensible design is:
+
+Classical / physics-based assessment
+          +
+Machine-learning-assisted assessment
+          â†“
+Comparison / enhancement / analysis
+
+
+============================================================
+30. WHY MONTE CARLO?
+============================================================
+
+No orbital prediction is perfectly certain.
+
+There can be uncertainty in:
+
+â€¢ Orbital state
+â€¢ TLE information
+â€¢ Propagation
+â€¢ Measurement/tracking
+â€¢ Object characteristics
+
+Monte Carlo simulation can help us model this uncertainty.
+
+Basic idea:
+
+1. Start with estimated orbital state.
+2. Generate many plausible variations.
+3. Propagate those samples.
+4. Calculate conjunction outcomes.
+5. Observe how the risk changes.
+
+
+============================================================
+31. SIMPLE MONTE CARLO EXAMPLE
+============================================================
+
+Suppose the estimated miss distance is:
+
+2.0 km
+
+But the orbital state has uncertainty.
+
+Instead of assuming exactly 2.0 km, we simulate many
+possible states:
+
+1.8 km
+2.1 km
+1.6 km
+2.4 km
+1.9 km
+...
+
+After many simulations we can examine the distribution
+of possible outcomes.
+
+That gives us a better understanding of uncertainty.
+
+
+============================================================
+32. WHY UNCERTAINTY MATTERS
+============================================================
+
+Suppose a single deterministic calculation says:
+
+"Miss distance = 2.0 km"
+
+That sounds exact.
+
+But the real question is:
+
+"How confident are we in that estimate?"
+
+Monte Carlo helps us answer that.
+
+Therefore our project is not simply:
+
+distance calculation
+
+It aims to consider:
+
+distance + uncertainty
+
+
+============================================================
+33. RISK CLASSIFICATION
+============================================================
+
+The dashboard concept uses:
+
+GREEN
+YELLOW
+RED
+
+Possible interpretation:
+
+GREEN:
+Low concern
+
+YELLOW:
+Needs monitoring / moderate concern
+
+RED:
+High-priority conjunction requiring attention
+
+IMPORTANT:
+
+The actual numerical thresholds should NOT be invented now.
+
+They should be defined after reviewing the chosen risk
+method, validating against data, and testing the system.
+
+Do not say:
+
+"Red means 80% probability"
+
+unless we have actually established and validated that rule.
+
+
+============================================================
+34. DASHBOARD
+============================================================
+
+The planned dashboard is intended to show:
+
+â€¢ Active satellites
+â€¢ Debris / tracked objects
+â€¢ Orbital paths
+â€¢ Close approaches
+â€¢ TCA
+â€¢ Miss distance
+â€¢ Risk score
+â€¢ Alert category
+â€¢ Object information
+â€¢ Historical events
+
+
+============================================================
+35. 3D VISUALIZATION
+============================================================
+
+A major visual feature of Orbis is a 3D orbital view.
+
+Conceptually:
+
+        satellite â—
+            \
+             \ orbital path
+              \
+               ðŸŒ Earth
+              /
+        debris â—
+
+The user should be able to identify:
+
+â€¢ Earth
+â€¢ satellite positions
+â€¢ object trajectories
+â€¢ close approaches
+â€¢ risk events
+
+
+============================================================
+36. TECHNOLOGY STACK
+============================================================
+
+BACKEND / SCIENTIFIC COMPUTING
+
+Python
+
+Libraries / tools:
+â€¢ SGP4
+â€¢ Skyfield
+â€¢ NumPy
+â€¢ Scikit-learn
+â€¢ XGBoost
+
+
+BACKEND API
+
+FastAPI
+
+
+FRONTEND
+
+React.js
+Tailwind CSS
+
+
+DATABASE
+
+PostgreSQL
+TimescaleDB
+
+
+VISUALIZATION
+
+Plotly
+and/or
+Cesium
+
+
+SCHEDULING
+
+APScheduler
+
+
+============================================================
+37. WHY PYTHON?
+============================================================
+
+Python is useful because the project requires:
+
+â€¢ Scientific computing
+â€¢ Orbital libraries
+â€¢ Machine learning
+â€¢ Numerical simulation
+â€¢ APIs
+â€¢ Data processing
+
+Python provides libraries for all of these components.
+
+
+============================================================
+38. WHY FASTAPI?
+============================================================
+
+FastAPI acts as the bridge between the computational
+backend and the frontend.
+
+For example:
+
+Frontend:
+"Give me today's high-risk conjunctions."
+
+FastAPI:
+Receives request
+        â†“
+Queries database / processing layer
+        â†“
+Returns JSON
+        â†“
+Frontend displays result
+
+
+============================================================
+39. WHY POSTGRESQL?
+============================================================
+
+We need persistent storage for information such as:
+
+â€¢ orbital records
+â€¢ object metadata
+â€¢ conjunction events
+â€¢ prediction results
+â€¢ timestamps
+â€¢ historical data
+
+PostgreSQL provides structured relational storage.
+
+TimescaleDB can be considered for time-series-heavy orbital
+and event data.
+
+
+============================================================
+40. WHY REACT?
+============================================================
+
+React can create the web dashboard.
+
+It can display:
+
+â€¢ tables
+â€¢ alerts
+â€¢ graphs
+â€¢ satellite information
+â€¢ interactive components
+
+It also separates frontend interface from backend logic.
+
+
+============================================================
+41. SYSTEM ARCHITECTURE
+============================================================
+
+The complete architecture is:
+
+                DATA SOURCES
+           Space-Track / CelesTrak
+                     â†“
+              DATA INGESTION
+                     â†“
+              TLE / GP PARSER
+                     â†“
+               SGP4 ENGINE
+                     â†“
+           ORBITAL POSITIONS
+                     â†“
+          CONJUNCTION SCREENING
+                     â†“
+             TCA / MISS DISTANCE
+                     â†“
+           FEATURE ENGINEERING
+                     â†“
+             XGBOOST MODEL
+                     â†“
+          MONTE CARLO ANALYSIS
+                     â†“
+            RISK CLASSIFICATION
+                     â†“
+           FASTAPI + DATABASE
+                     â†“
+         REACT / 3D DASHBOARD
+                     â†“
+              ALERTS / OUTPUT
+
+
+============================================================
+42. END-TO-END EXAMPLE
+============================================================
+
+Suppose:
+
+Indian satellite = SAT-A
+Debris = OBJ-B
+
+Step 1:
+Get TLE for SAT-A and OBJ-B.
+
+Step 2:
+Send both through SGP4.
+
+Step 3:
+Calculate future positions.
+
+Step 4:
+Find whether their orbital paths can bring them close.
+
+Step 5:
+Calculate TCA.
+
+Step 6:
+Calculate miss distance.
+
+Suppose:
+
+TCA = 2026-XX-XX XX:XX
+Miss distance = 1.8 km
+
+Step 7:
+Create ML features:
+
+â€¢ Miss distance
+â€¢ Relative velocity
+â€¢ Inclination difference
+â€¢ Object characteristics
+â€¢ Other selected features
+
+Step 8:
+XGBoost produces a risk estimate/classification.
+
+Step 9:
+Monte Carlo tests uncertainty around the event.
+
+Step 10:
+Dashboard displays:
+
+SAT-A
+vs
+OBJ-B
+
+TCA: ...
+Miss distance: ...
+Risk: RED
+
+
+============================================================
+43. WHAT IS THE ACTUAL ML DATASET?
+============================================================
+
+This is a major implementation task.
+
+The raw TLE dataset is NOT automatically an ML dataset.
+
+We have to transform:
+
+TLE
+ â†“
+SGP4 propagation
+ â†“
+candidate conjunction
+ â†“
+derived features
+ â†“
+target/risk label
+ â†“
+ML training table
+
+
+============================================================
+44. WHAT CAN BECOME THE ML LABEL?
+============================================================
+
+This is one of the things we still need to determine
+carefully.
+
+Possible approaches include:
+
+1. Historical conjunction-risk labels, where available.
+2. A validated reference risk calculation.
+3. Carefully defined event categories.
+4. Simulation-based labels for controlled experiments.
+
+We must not arbitrarily invent labels and then claim that
+they represent real-world collision probability.
+
+The labeling strategy is therefore a research decision
+that needs to be finalized.
+
+
+============================================================
+45. WHY THIS DATASET QUESTION IS HARD
+============================================================
+
+Actual satellite collisions are rare.
+
+If we train only on real collisions:
+
+Dataset may be extremely small.
+
+If we create only synthetic collisions:
+
+Dataset may not represent real operational conditions.
+
+Therefore we may need a hybrid approach:
+
+REAL ORBITAL DATA
++
+HISTORICAL CONJUNCTION INFORMATION
++
+DERIVED FEATURES
++
+CONTROLLED SIMULATION
+
+
+============================================================
+46. POSSIBLE DATA PIPELINE
+============================================================
+
+Space-Track / CelesTrak
+        â†“
+TLE collection
+        â†“
+TLE parser
+        â†“
+Object catalogue
+        â†“
+SGP4 propagation
+        â†“
+Candidate conjunctions
+        â†“
+TCA + miss distance
+        â†“
+Feature table
+        â†“
+Historical/derived labels
+        â†“
+ML dataset
+
+
+============================================================
+47. WHY METADATA IS USEFUL
+============================================================
+
+Suppose the system says:
+
+Risk = 0.82
+
+That alone is not very meaningful.
+
+If the system can also tell us:
+
+Object:
+INSAT-related satellite
+Type:
+Communication / weather etc.
+NORAD ID:
+XXXXX
+
+Then the dashboard becomes much more useful.
+
+Metadata helps provide context.
+
+However:
+
+Metadata should not automatically be treated as a collision
+risk feature.
+
+Its usefulness must be tested.
+
+
+============================================================
+48. RESEARCH PAPERS WE INVESTIGATED
+============================================================
+
+We looked at research/reference material related to:
+
+1. SGP4 / SpaceTrack Report No. 3
+2. Vallado and related SGP4 validation work
+3. NASA conjunction assessment / CARA material
+4. ESA conjunction-analysis research
+5. Collision probability methods
+6. Time of Closest Approach / conjunction algorithms
+7. Monte Carlo uncertainty analysis
+8. Machine-learning applications in conjunction/risk analysis
+
+The purpose of reading these was NOT just to collect references.
+
+We wanted to understand:
+
+â€¢ How orbit propagation works
+â€¢ How conjunction detection works
+â€¢ How collision risk is traditionally calculated
+â€¢ How uncertainty is handled
+â€¢ Where ML can be introduced
+â€¢ What limitations existing approaches have
+
+
+============================================================
+49. WHAT EXISTING RESEARCH ALREADY SOLVES
+============================================================
+
+This is an important correction to our original project wording.
+
+Existing research absolutely does solve major parts of
+the problem.
+
+For example:
+
+SGP4
+â†’ orbit propagation
+
+Conjunction-analysis research
+â†’ close-approach detection
+
+Classical probability methods
+â†’ collision-risk estimation
+
+Operational systems
+â†’ real-world conjunction assessment
+
+Machine-learning research
+â†’ explores data-driven prediction/risk assessment
+
+
+============================================================
+50. THEN WHAT IS OUR RESEARCH GAP?
+============================================================
+
+Our gap is NOT:
+
+"Nobody has solved collision detection."
+
+That claim would be too strong.
+
+Our better gap is:
+
+Existing techniques solve specific parts of the problem,
+while our project aims to integrate:
+
+â€¢ public orbital data
+â€¢ propagation
+â€¢ conjunction screening
+â€¢ risk assessment
+â€¢ uncertainty analysis
+â€¢ machine learning
+â€¢ visualization
+
+into one modular student-developed prototype.
+
+The novelty is therefore primarily in the
+INTEGRATION AND IMPLEMENTATION of the workflow.
+
+
+============================================================
+51. WHY WE CHOSE HYBRID PHYSICS + AI
+============================================================
+
+Pure ML is not ideal because:
+
+â€¢ orbital motion has strong physical structure
+â€¢ training data is limited
+â€¢ black-box prediction can be difficult to trust
+
+Pure physics may also be insufficient for every analytical
+decision because:
+
+â€¢ uncertainty exists
+â€¢ data characteristics vary
+â€¢ complex nonlinear patterns may exist
+
+Therefore:
+
+PHYSICS
+   +
+MACHINE LEARNING
+   +
+UNCERTAINTY
+   â†“
+HYBRID APPROACH
+
+
+============================================================
+52. WHY NOT ONLY DEEP LEARNING?
+============================================================
+
+We considered this.
+
+For an initial version, XGBoost can be a more practical
+choice because our expected input is structured/tabular
+conjunction data.
+
+Deep learning can be considered later when we have:
+
+â€¢ enough training data
+â€¢ stronger labels
+â€¢ sufficient compute
+â€¢ a clear reason to outperform the baseline
+
+
+============================================================
+53. LIMITATIONS WE ALREADY KNOW
+============================================================
+
+1. TLE accuracy limits the quality of propagation.
+
+2. Long-horizon propagation can introduce error.
+
+3. Real collision events are rare.
+
+4. Historical conjunction data may not be perfectly labelled
+   for our intended ML task.
+
+5. Computational cost increases as the number of objects
+   increases.
+
+6. Collision probability is an uncertain quantity.
+
+7. Ground-truth validation is difficult.
+
+8. External datasets can have licensing/access/version
+   considerations.
+
+These are not weaknesses to hide.
+
+They are research limitations.
+
+
+============================================================
+54. WHAT THE JUDGES MAY ASK ABOUT DATA
+============================================================
+
+QUESTION:
+"Where is your dataset?"
+
+ANSWER:
+
+"Our orbital input is real TLE/GP data obtained from
+sources such as Space-Track and CelesTrak. However, TLE is
+not directly an ML-labelled collision dataset. We generate
+orbital and conjunction features through SGP4 and conjunction
+analysis, and we are investigating suitable historical
+conjunction information and controlled simulation for the
+ML training component."
+
+
+QUESTION:
+"Do you have collision labels?"
+
+ANSWER:
+
+"Direct real collision labels are limited because actual
+collisions are rare. Therefore we are treating label
+construction as a separate research task and will validate
+the chosen strategy against appropriate reference data."
+
+
+============================================================
+55. WHAT THE JUDGES MAY ASK:
+"WHAT IS YOUR ACTUAL INPUT?"
+============================================================
+
+Answer:
+
+"The main input is orbital TLE/GP data, along with relevant
+object metadata. The TLE is propagated through SGP4 to
+generate future positions and velocities, which are then
+used to construct conjunction and ML features."
+
+
+============================================================
+56. WHAT THE JUDGES MAY ASK:
+"WHERE DOES AI ENTER?"
+============================================================
+
+Answer:
+
+"AI is introduced after physics-based conjunction features
+have been generated. The proposed XGBoost layer learns
+relationships between conjunction characteristics and the
+selected risk target, while SGP4 remains responsible for
+physical orbit propagation."
+
+
+============================================================
+57. WHAT THE JUDGES MAY ASK:
+"WHY NOT JUST USE SGP4?"
+============================================================
+
+Answer:
+
+"SGP4 predicts orbital states; it does not by itself provide
+our complete risk-assessment workflow. Orbis uses SGP4
+as the physics layer and adds conjunction analysis,
+machine-learning-assisted risk assessment, uncertainty
+analysis, and visualization."
+
+
+============================================================
+58. WHAT THE JUDGES MAY ASK:
+"IS THIS REAL-TIME?"
+============================================================
+
+Our project is designed around frequently updated orbital
+data and automated processing.
+
+However, we must distinguish:
+
+Prototype:
+periodic data ingestion and automated processing
+
+Operational mission-control system:
+much more stringent real-time requirements, tracking quality,
+validation, and safety certification.
+
+We should call Orbis a prototype, not claim operational
+deployment.
+
+
+============================================================
+59. WHAT THE JUDGES MAY ASK:
+"CAN ISRO USE IT?"
+============================================================
+
+Safe answer:
+
+"The architecture is inspired by the type of workflow used
+in space situational awareness, but our current project is an
+academic prototype. It would require significantly more
+validated tracking data, operational interfaces, uncertainty
+models, testing, and certification before any real mission
+use."
+
+
+============================================================
+60. TEAM MEMBER 1 â€” DATA / ORBIT PIPELINE
+============================================================
+
+Responsibilities:
+
+â€¢ Space-Track / CelesTrak ingestion
+â€¢ TLE parsing
+â€¢ Object identification
+â€¢ Data storage
+â€¢ Scheduler
+â€¢ SGP4 integration
+â€¢ Position/velocity generation
+
+Must understand:
+
+â€¢ TLE
+â€¢ NORAD ID
+â€¢ SGP4
+â€¢ Epoch
+â€¢ Position
+â€¢ Velocity
+â€¢ Orbital data formats
+â€¢ Data validation
+
+
+============================================================
+61. TEAM MEMBER 2 â€” AI / ML
+============================================================
+
+Responsibilities:
+
+â€¢ Conjunction feature engineering
+â€¢ ML dataset construction
+â€¢ XGBoost
+â€¢ Baseline model
+â€¢ Training
+â€¢ Validation
+â€¢ Monte Carlo
+â€¢ Risk analysis
+
+Must understand:
+
+â€¢ Feature
+â€¢ Label
+â€¢ Training set
+â€¢ Validation set
+â€¢ Test set
+â€¢ Class imbalance
+â€¢ Precision
+â€¢ Recall
+â€¢ F1-score
+â€¢ ROC-AUC
+â€¢ Probability calibration
+â€¢ Data leakage
+
+
+============================================================
+62. TEAM MEMBER 3 â€” VISUALIZATION / FRONTEND
+============================================================
+
+Responsibilities:
+
+â€¢ React
+â€¢ Dashboard
+â€¢ Tables
+â€¢ Alert cards
+â€¢ 3D visualization
+â€¢ Plotly / Cesium
+â€¢ Object search
+â€¢ Risk visualization
+
+Must understand:
+
+â€¢ What TCA means
+â€¢ What miss distance means
+â€¢ What risk means
+â€¢ What the user should see
+â€¢ Difference between object data and calculated data
+
+
+============================================================
+63. TEAM MEMBER 4 â€” BACKEND / INTEGRATION
+============================================================
+
+Responsibilities:
+
+â€¢ FastAPI
+â€¢ API design
+â€¢ PostgreSQL
+â€¢ Pipeline integration
+â€¢ Frontend-backend communication
+â€¢ Database schema
+â€¢ Testing
+â€¢ Deployment
+
+Must understand:
+
+â€¢ REST APIs
+â€¢ JSON
+â€¢ Database relationships
+â€¢ Event records
+â€¢ Job scheduling
+â€¢ Error handling
+â€¢ Data flow
+
+
+============================================================
+64. WHAT EVERY TEAM MEMBER MUST KNOW
+============================================================
+
+EVERYONE should know:
+
+1. What TLE is.
+2. What SGP4 does.
+3. What a conjunction is.
+4. What TCA means.
+5. What miss distance means.
+6. Why screening is needed.
+7. Where ML enters.
+8. Why XGBoost was selected.
+9. What Monte Carlo does.
+10. Where our data comes from.
+11. Why collision labels are difficult.
+12. What the research gap actually is.
+13. What the dashboard displays.
+14. What our limitations are.
+
+
+============================================================
+65. PHASE-I STATUS
+============================================================
+
+Phase I is primarily:
+
+â€¢ Problem definition
+â€¢ Domain study
+â€¢ Existing-system study
+â€¢ Research-gap identification
+â€¢ Dataset investigation
+â€¢ Architecture design
+â€¢ Methodology design
+â€¢ Feasibility study
+â€¢ Evaluation-plan definition
+
+It is NOT yet the final experimental-results stage.
+
+
+============================================================
+66. CURRENT PHASE-I PRIORITY
+============================================================
+
+Our immediate priority should be:
+
+STEP 1:
+Finalize datasets.
+
+STEP 2:
+Build small TLE ingestion prototype.
+
+STEP 3:
+Parse TLE.
+
+STEP 4:
+Run SGP4.
+
+STEP 5:
+Generate position/velocity.
+
+STEP 6:
+Create a basic conjunction detector.
+
+STEP 7:
+Create first conjunction feature table.
+
+STEP 8:
+Decide the ML target/label.
+
+STEP 9:
+Build a baseline model.
+
+STEP 10:
+Then scale the system.
+
+
+============================================================
+67. DO NOT START WITH 27,000 OBJECTS
+============================================================
+
+We should start small.
+
+Example:
+
+10 objects
+   â†“
+SGP4
+   â†“
+positions
+   â†“
+distance calculations
+   â†“
+conjunction candidates
+
+Then:
+
+100 objects
+   â†“
+1,000 objects
+   â†“
+larger catalogue
+
+This makes debugging much easier.
+
+
+============================================================
+68. FIRST WORKING DEMO WE SHOULD AIM FOR
+============================================================
+
+A simple but genuine demo:
+
+Input:
+TLEs for a small set of objects.
+
+System:
+SGP4 propagation.
+
+Output:
+For each object:
+
+â€¢ NORAD ID
+â€¢ Time
+â€¢ Position
+â€¢ Velocity
+
+Then:
+
+Pair objects
+â†“
+calculate separation
+â†“
+find minimum separation
+â†“
+display TCA
+â†“
+show candidate conjunction
+
+
+This is the first technically meaningful milestone.
+
+
+============================================================
+69. SECOND DEMO
+============================================================
+
+After basic conjunction detection works:
+
+For each event display:
+
+Object A
+Object B
+TCA
+Miss distance
+Relative velocity
+Orbital information
+
+Then create a structured feature table.
+
+This becomes the input to the ML pipeline.
+
+
+============================================================
+70. THIRD DEMO
+============================================================
+
+Then add:
+
+XGBoost
++
+risk score/category
+
+Then:
+
+Monte Carlo
++
+uncertainty range
+
+Then dashboard.
+
+This gives us a believable progression:
+
+PHYSICS
+â†’
+CONJUNCTION
+â†’
+ML
+â†’
+UNCERTAINTY
+â†’
+VISUALIZATION
+
+
+============================================================
+71. WHAT SUCCESS LOOKS LIKE
+============================================================
+
+A successful project does NOT require us to claim:
+
+"we can prevent satellite collisions."
+
+A successful project should demonstrate:
+
+â€¢ Real orbital data ingestion
+â€¢ Correct TLE parsing
+â€¢ Correct SGP4 use
+â€¢ Meaningful future positions
+â€¢ Conjunction detection
+â€¢ Feature generation
+â€¢ A justified ML experiment
+â€¢ Uncertainty analysis
+â€¢ Useful dashboard output
+â€¢ Measured evaluation
+
+
+============================================================
+72. FINAL PROJECT STORY
+============================================================
+
+The complete story we tell is:
+
+Earth orbit is becoming more congested.
+
+We need to know where orbital objects will be.
+
+TLE gives us orbital information.
+
+SGP4 propagates the objects into the future.
+
+Conjunction analysis identifies potentially close
+encounters.
+
+TCA tells us when the closest approach occurs.
+
+Miss distance tells us how close the objects become.
+
+Additional orbital/event features describe the encounter.
+
+XGBoost is used as the proposed ML risk-assessment layer.
+
+Monte Carlo examines uncertainty.
+
+The dashboard presents the result to a human operator.
+
+Therefore Orbis connects:
+
+DATA
++
+PHYSICS
++
+AI
++
+UNCERTAINTY
++
+VISUALIZATION
+
+into one end-to-end prototype.
+
+
+============================================================
+73. THE MOST IMPORTANT SENTENCE FOR THE TEAM
+============================================================
+
+"Orbis is not an algorithm that replaces existing
+space-surveillance systems; it is an integrated academic
+prototype that combines real orbital data, physics-based
+propagation, conjunction analysis, machine-learning-assisted
+risk assessment, uncertainty modelling, and visualization."
+
+
+============================================================
+74. WHAT WE SHOULD NEVER CLAIM
+============================================================
+
+DO NOT SAY:
+
+â€¢ "We invented collision detection."
+â€¢ "Nobody has solved this problem."
+â€¢ "NASA/ISRO has no collision system."
+â€¢ "Our model is already 95% accurate."
+â€¢ "We have millions of collision labels."
+â€¢ "TLE directly gives latitude and longitude."
+â€¢ "XGBoost predicts satellite position."
+â€¢ "Monte Carlo guarantees correct collision probability."
+â€¢ "Our system can currently control satellites."
+â€¢ "Our prototype can safely perform real satellite
+  manoeuvres."
+
+
+============================================================
+75. WHAT WE CAN CONFIDENTLY SAY
+============================================================
+
+"We use real orbital data."
+
+"We use TLE/GP data from orbital-data providers such as
+Space-Track and CelesTrak."
+
+"SGP4 is our orbital propagation layer."
+
+"We calculate conjunction-related features."
+
+"XGBoost is our proposed ML risk-assessment algorithm."
+
+"Monte Carlo is used for uncertainty analysis."
+
+"We are developing an integrated prototype."
+
+"Real collision labels are limited, so dataset construction
+and validation are important research tasks."
+
+"Our project integrates established techniques rather than
+claiming to invent all of them."
+
+
+============================================================
+76. FINAL MENTAL MODEL
+============================================================
+
+              WHAT WE KNOW
+                   â†“
+              REAL TLE DATA
+                   â†“
+              WHERE THEY GO
+                   â†“
+                  SGP4
+                   â†“
+            WHO COMES CLOSE?
+                   â†“
+            CONJUNCTION/TCA
+                   â†“
+             HOW DANGEROUS?
+                   â†“
+              XGBOOST + 
+             RISK METHOD
+                   â†“
+          HOW UNCERTAIN IS IT?
+                   â†“
+              MONTE CARLO
+                   â†“
+             HOW TO SHOW IT?
+                   â†“
+             DASHBOARD
+                   â†“
+                ORBIS
+
+
+============================================================
+77. FINAL TEAM OBJECTIVE
+============================================================
+
+By the end of development, the team should be able to
+demonstrate a working chain:
+
+1. Obtain real TLE data.
+2. Parse it.
+3. Propagate it.
+4. Detect close approaches.
+5. Calculate TCA and miss distance.
+6. Build an ML-ready feature set.
+7. Train/evaluate the selected risk model.
+8. Analyse uncertainty.
+9. Store results.
+10. Visualize them.
+11. Evaluate the system.
+12. Explain every part confidently.
+
+
+============================================================
+78. CURRENT THREE-DAY FRONTEND PROTOTYPE SCOPE
+============================================================
+
+The first Orbis prototype is intentionally limited to a
+frontend visual demonstration. It does NOT yet implement:
+
+• Real TLE or Space-Track/CelesTrak ingestion
+• SGP4 propagation
+• Conjunction detection
+• XGBoost or machine learning
+• Monte Carlo uncertainty analysis
+• Backend APIs or database storage
+• Operational alerts or collision-probability claims
+
+The current prototype demonstrates only the visual direction:
+
+• An animated solar-system overview when the application opens
+• Planets moving around the Sun at noticeable visual speeds
+• A clickable Earth that opens a closer Earth orbital view
+• A simple search action for opening Earth
+• A beautiful space-themed interface with no scientific data yet
+
+The frontend is being built with:
+
+• React
+• TypeScript
+• Vite
+• Three.js through React Three Fiber
+• Drei helpers for stars, controls and texture loading
+
+The future scientific pipeline can be connected later. For
+this milestone, the goal is a clear, honest and polished visual
+starting point that can be demonstrated in three days.
+
+
+============================================================
+END OF TEAM BRIEFING
+============================================================

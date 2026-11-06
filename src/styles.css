@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root { color: #f5f4ed; background: #010207; font-family: Manrope, sans-serif; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: #010207; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+.app-shell { min-height: 100vh; overflow: hidden; position: relative; background: #010207; }
+.scene, .vignette { position: absolute; inset: 0; }
+.scene { z-index: 0; }
+.vignette { z-index: 1; pointer-events: none; background: radial-gradient(ellipse at 58% 52%, transparent 28%, rgba(1,2,7,.12) 62%, rgba(1,2,7,.64) 100%), linear-gradient(90deg, rgba(1,2,7,.72), transparent 34%, transparent 73%, rgba(1,2,7,.2)); }
+.topbar, .copy, footer, .instruction, .back-button { position: relative; z-index: 2; }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 22px 2.6vw; }
+.brand { display: flex; align-items: center; gap: 12px; color: #f5f4ed; background: none; border: 0; padding: 0; text-align: left; }
+.brand-mark { display: grid; place-items: center; width: 35px; height: 35px; border: 1px solid #d5f86c; border-radius: 50%; color: #d5f86c; font-weight: 800; font-size: 18px; }
+.brand strong { display: block; letter-spacing: .3em; font-size: 14px; }.brand small { display: block; margin-top: 3px; font: 8px 'DM Mono', monospace; letter-spacing: .13em; color: #778095; }
+.search { display: flex; align-items: center; gap: 10px; width: min(250px, 30vw); padding: 10px 13px; border: 1px solid rgba(123,143,178,.3); border-radius: 7px; color: #748099; background: rgba(8,12,25,.75); box-shadow: 0 6px 25px rgba(0,0,0,.2); }
+.search input { width: 100%; color: #e9ebdf; border: 0; outline: 0; background: transparent; font-size: 12px; }.search kbd { color: #636d82; font: 9px 'DM Mono', monospace; white-space: nowrap; }.status, .eyebrow, footer, .instruction, .back-button { font: 10px 'DM Mono', monospace; letter-spacing: .14em; color: #96a0b5; }.status { color: #d5f86c; font-size: 9px; }.status i { display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: #d5f86c; box-shadow: 0 0 12px #d5f86c; }
+.copy { width: min(390px, 37vw); padding: 12vh 0 0 5.4vw; }.eyebrow { color: #d5f86c; font-size: 9px; }.copy h1 { margin: 21px 0 16px; font-size: clamp(42px, 5.7vw, 82px); line-height: .96; letter-spacing: -.075em; font-weight: 500; text-shadow: 0 10px 35px rgba(0,0,0,.8); }.copy h1 em { color: #b6bfd0; font-style: normal; font-weight: 400; }.copy p:last-child { color: #8791a5; font-size: 13px; }
+.instruction { position: absolute; z-index: 2; right: 4.8vw; bottom: 11vh; color: #f1f3eb; font-size: 9px; }.instruction span { color: #7d8799; }
+.scene-label { display: block; padding: 4px 7px; color: #d7e3a1; background: rgba(3, 7, 15, .78); border: 1px solid rgba(213, 248, 108, .35); box-shadow: 0 4px 14px rgba(0, 0, 0, .35); font: 9px 'DM Mono', monospace; letter-spacing: .12em; white-space: nowrap; pointer-events: none; }.sun-label { color: #f5d48a; border-color: rgba(245, 212, 138, .48); }.moon-label { color: #c9d0dc; border-color: rgba(201, 208, 220, .38); }
+.back-button { position: absolute; left: 2.6vw; top: 14vh; color: #d5f86c; background: rgba(3,5,12,.68); border: 1px solid rgba(213,248,108,.3); padding: 11px 15px; letter-spacing: .1em; box-shadow: 0 8px 30px rgba(0,0,0,.35); }
+footer { position: absolute; right: 2.6vw; bottom: 22px; left: 2.6vw; display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,.13); padding-top: 13px; font-size: 9px; }footer b { color: #d5f86c; margin-left: 9px; }
+@media (max-width: 700px) { .topbar { padding: 18px 20px; }.status { display: none; }.search { width: 42px; padding: 10px; }.search input, .search kbd { display: none; }.copy { width: 80vw; padding: 10vh 25px 0; }.copy h1 { font-size: clamp(40px, 12vw, 54px); }.copy p:last-child { max-width: 260px; line-height: 1.5; }.instruction { right: 25px; bottom: 13vh; font-size: 8px; }.back-button { top: 13vh; left: 20px; }footer { right: 20px; bottom: 18px; left: 20px; font-size: 8px; } }
