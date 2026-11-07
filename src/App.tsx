@@ -8,7 +8,7 @@ type View = 'system' | 'earth'
 const planets = [
   { name: 'Mercury', radius: 1.15, orbit: 7, size: 0.28, color: '#aaa49a', speed: 1.35 },
   { name: 'Venus', radius: 1.35, orbit: 10, size: 0.4, color: '#e0aa69', speed: 1.05 },
-  { name: 'Earth', radius: 1.5, orbit: 13, size: 0.48, color: '#3e8fbd', speed: 0.82 },
+  { name: 'Earth', radius: 1.5, orbit: 13, size: 0.48, color: '#f30f0f', speed: 0.82 },
   { name: 'Mars', radius: 1.2, orbit: 16, size: 0.34, color: '#d16a48', speed: 0.68 },
   { name: 'Jupiter', radius: 2.2, orbit: 21, size: 1.15, color: '#c79a75', speed: 0.45 },
   { name: 'Saturn', radius: 1.7, orbit: 27, size: 0.95, color: '#d5b27e', speed: 0.34 },
@@ -19,7 +19,7 @@ const planets = [
 function Sun() {
   return (
     <group>
-      <pointLight intensity={130} distance={140} color="#ffdca1" />
+      <pointLight intensity={130} distance={140} color="#1815db" />
       <Html position={[0, 2.8, 0]} center distanceFactor={40}>
         <span className="scene-label sun-label">SUN / LIGHT SOURCE</span>
       </Html>
